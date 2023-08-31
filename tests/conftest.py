@@ -1,4 +1,5 @@
 import pytest
+import logging
 import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromiumService
@@ -42,5 +43,7 @@ def browser(request):
 
     driver.get(url)
     driver.url = url
+    driver.log_level = logging.DEBUG
+    driver.test_name = request.node.name
 
     return driver
