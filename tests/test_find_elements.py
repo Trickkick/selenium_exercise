@@ -1,65 +1,102 @@
 import pytest
+import allure
 import time
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
+from page_objects.NavigationPage import NavigationPage
+from page_objects.RegistrationPage import RegistrationPage
+from page_objects.HomePage import HomePage
+from page_objects.AdminPage import AdminPage
 
 
+@allure.feature("Navigation Page")
+@allure.title("Find elements on navigation page")
+def test_navigation_page_find_elements(browser):
+    navigation_page = NavigationPage(browser)
+    navigation_page.element(navigation_page.SHOP_CART)
+    navigation_page.element(navigation_page.NAVIGATION_BAR)
+    navigation_page.element(navigation_page.SEARCH_BUTTON)
+    navigation_page.element(navigation_page.SEARCH_INPUT)
+    navigation_page.element(navigation_page.CURRENCY_DROPDOWN)
+    navigation_page.element(navigation_page.CART_TOTAL)
+    navigation_page.navigation_search("hoho")
+    navigation_page.switch_currency("EUR")
+    navigation_page.go_to_registration()
+    time.sleep(3)
+
+
+@allure.feature("Home page")
+@allure.title("Find elements on home page")
 def test_home_page_find_elements(browser):
-    wait = WebDriverWait(browser, 1)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.pull-left")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.nav.pull-right")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "ul.navbar-nav")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.col-sm-5")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.slideshow.swiper-viewport")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#content > div.row")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.carousel.swiper-viewport")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "footer")))
+    home_page = HomePage(browser)
+    home_page.element(home_page.SLIDESHOW_SWIPER)
+    home_page.element(home_page.PRODUCTS)
+    home_page.element(home_page.PRICES)
 
 
+@allure.feature("Admin page")
+@allure.feature("Find elements on admin login page")
 def test_admin_login_page_find_elements(browser):
-    browser.get(browser.current_url + "/admin")
-    wait = WebDriverWait(browser, 1)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#header-logo")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".panel-title")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#input-username")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".help-block > a")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".text-right > button")))
+    admin_page = AdminPage(browser)
+    admin_page.go_to_page()
+    admin_page.element(admin_page.HEADER_LOGO)
+    admin_page.element(admin_page.PANEL_TITLE)
+    admin_page.element(admin_page.USERNAME)
+    admin_page.element(admin_page.PASSWORD)
+    admin_page.element(admin_page.LOGIN_BUTTON)
 
 
-def test_product_card_find_elements(browser):
-    browser.get(browser.current_url + "/component/monitor/test")
-    wait = WebDriverWait(browser, 1)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "ul.thumbnails")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[data-original-title='Add to Wish List']")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[data-original-title='Compare this Product']")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".nav.nav-tabs")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".tab-content")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button#button-cart")))
+@allure.feature("Admin page")
+@allure.feature("Add new product on admin page")
+def test_admin_add_product(browser):
+    admin_page = AdminPage(browser)
+    admin_page.go_to_page()
+    admin_page.login_admin()
+    admin_page.add_product("aaa", "aaa", "aaa")
+    time.sleep(2)
+    assert admin_page.find_product("aaa") is not None
 
 
-def test_user_registration_page_find_elements(browser):
-    browser.get(browser.current_url + "/index.php?route=account/register")
-    wait = WebDriverWait(browser, 1)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#column-right")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#input-firstname")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#input-lastname")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#input-email")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#input-password")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#input-telephone")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".radio-inline")))
+@allure.feature("Admin page")
+@allure.feature("Delete new product on admin page")
+def test_admin_delete_product(browser):
+    admin_page = AdminPage(browser)
+    admin_page.go_to_page()
+    admin_page.login_admin()
+    admin_page.go_to_product_table()
+    # admin_page.delete_product_by_number(1)
+    admin_page.delete_product_by_name("aaa")
+    time.sleep(2)
+    assert admin_page.find_product("aaa") is None
 
 
-def test_catalog_find_elements(browser):
-    browser.get(browser.current_url + "/component/monitor")
-    wait = WebDriverWait(browser, 1)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".list-group")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".swiper-viewport")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#list-view")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#grid-view")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".swiper-viewport")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#input-sort")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".swiper-viewport")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#input-limit")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".swiper-viewport")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-layout")))
+@allure.feature("Registration page")
+@allure.feature("Register new user")
+def test_user_register_with_alert(browser):
+    registration_page = RegistrationPage(browser)
+    NavigationPage(browser).go_to_registration()
+    registration_page.register_account("a", "aa", "a@mail.ru", 444, "a23s")
+    registration_page.element(registration_page.AGREE_ALERT).is_displayed()
+    time.sleep(2)
+
+
+@allure.feature("Registration page")
+@allure.feature("Register new user without alert")
+def test_user_register_no_alert(browser):
+    registration_page = RegistrationPage(browser)
+    NavigationPage(browser).go_to_registration()
+    registration_page.register_account("a", "aa", "aaaa@mail.ru", 444, "a23asds", "agree")
+    time.sleep(2)
+
+
+@allure.feature("Navigation page")
+@allure.feature("Switch currency positive")
+def test_switch_currency_positive(browser):
+    navigation_page = NavigationPage(browser)
+    navigation_page.switch_currency("EUR")
+    assert HomePage(browser).check_current_currency('€') == '€'
+
+
+@allure.feature("Navigation page")
+@allure.feature("Switch currency negative")
+def test_switch_currency_negative(browser):
+    navigation_page = NavigationPage(browser)
+    navigation_page.switch_currency("RUB")
