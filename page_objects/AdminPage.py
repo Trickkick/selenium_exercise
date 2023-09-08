@@ -25,6 +25,8 @@ class AdminPage(BasePage):
     PRODUCT_NAME_ELEMENT = (By.CSS_SELECTOR, "td:nth-child(3)")
     CHECK_BOX_ELEMENT = (By.CSS_SELECTOR, "td:first-child >input")
     DELETE_BUTTON = (By.CSS_SELECTOR, "[data-original-title='Delete']")
+    HEADER_LOGO = (By.CSS_SELECTOR, "#header-logo")
+    PANEL_TITLE = (By.CSS_SELECTOR, ".panel-title")
 
     def go_to_page(self):
         self.browser.get(self.browser.url + self.PATH_TO_PAGE)

@@ -1,6 +1,7 @@
 import pytest
 import logging
 import os
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromiumService
 from selenium.webdriver.chrome.options import Options as ChromiumOptions
@@ -12,7 +13,7 @@ from selenium.webdriver.edge.options import Options as EdgeOptions
 
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome", help="Type of browser you want to use")
-    parser.addoption("--url", action="store", default="http://192.168.50.8:8081", help="testing url")
+    parser.addoption("--url", action="store", default="http://192.168.50.8:8081/", help="testing url")
 
 
 @pytest.fixture
