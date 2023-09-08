@@ -5,9 +5,6 @@ from page_objects.NavigationPage import NavigationPage
 from page_objects.RegistrationPage import RegistrationPage
 from page_objects.HomePage import HomePage
 from page_objects.AdminPage import AdminPage
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 
 @allure.feature("Navigation Page")
